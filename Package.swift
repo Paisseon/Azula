@@ -5,9 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "Azula",
+    platforms: [.macOS("11.0"), .iOS("14.0")],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/Paisseon/AzulaKit", from: "0.0.3"),
+        .package(url: "https://github.com/Paisseon/AzulaKit", branch: "emt"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
         .package(url: "https://github.com/weichsel/ZIPFoundation", from: "0.9.16")
     ],
