@@ -13,10 +13,10 @@ import SwiftUI
 struct ContentView: View {
     // MARK: Internal
 
-    @State var isElleKit: Bool = false
-    @State var shouldSlice: Bool = false
-    @State var targetURLs: [URL] = []
-    @State var dylibURLs: [URL] = []
+    @State private var isElleKit: Bool = false
+    @State private var shouldSlice: Bool = false
+    @State private var targetURLs: [URL] = []
+    @State private var dylibURLs: [URL] = []
 
     var body: some View {
         VStack {
@@ -51,7 +51,7 @@ struct ContentView: View {
             }
 
             Button("Patch") {
-                Task {
+                Task(priority: .userInitiated) {
                     await patch()
                 }
             }
@@ -73,6 +73,10 @@ struct ContentView: View {
         guard let binURL: URL = ipaHelper.getBinaryURL() else {
             return
         }
+        
+        #if DEBUG
+        let tick: CFAbsoluteTime = CFAbsoluteTimeGetCurrent()
+        #endif
 
         if isElleKit {
             guard let ellekitURL: URL = Bundle.main.url(forResource: "libellekit", withExtension: "dylib"),
@@ -124,5 +128,18 @@ struct ContentView: View {
             targetURLs = []
             dylibURLs = []
         }
+        
+        #if DEBUG
+        let tock: CFAbsoluteTime = CFAbsoluteTimeGetCurrent()
+        let stepRuntime: String = .init(format: "%.2fs", tock - tick)
+        
+        RainbowLogger.shared.print(Log(text: "Completed in \(stepRuntime)", type: .info)) // Injecting Satella Jailed into GM5 takes 0,03 seconds!
+        #endif
     }
 }
+
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}

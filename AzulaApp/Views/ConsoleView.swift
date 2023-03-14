@@ -11,6 +11,10 @@ import SwiftUI
 // MARK: - ConsoleView
 
 struct ConsoleView: View {
+    #if os(iOS)
+    @Environment(\.colorScheme) var colourScheme
+    #endif
+    
     // MARK: Internal
 
     var body: some View {
@@ -29,7 +33,11 @@ struct ConsoleView: View {
         }
         .frame(minWidth: 300, minHeight: 100)
         .padding()
+        #if os(iOS)
+        .background((colourScheme == .dark ? Color.gray.opacity(0.3) : Color.black).clipShape(RoundedRectangle(cornerRadius: 18)))
+        #else
         .background(Color.black.clipShape(RoundedRectangle(cornerRadius: 18)))
+        #endif
     }
 
     // MARK: Private
