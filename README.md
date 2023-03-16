@@ -9,7 +9,7 @@
 - Lightning fast injection (~0,03 seconds)
 - Inject multiple dylibs at once
 - Replace Substrate with ElleKit
-- Code signature slicing (not recommended)
+- Code signature slicing (not recommended unless you use TS)
 - Helpful log console
 
 ## Usage
