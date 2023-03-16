@@ -7,10 +7,11 @@
 
 #if os(macOS)
 import AppKit
+#else
+import UIKit
 #endif
 
 import AzulaKit
-import Foundation
 import UniformTypeIdentifiers
 import ZIPFoundation
 
@@ -51,7 +52,9 @@ struct IPAHelper {
         return appURL.slash(appURL.lastPathComponent.dropLast(4).description)
     }
     
-    func repackIPA() {
+    func repackIPA(
+        forTrollStore shouldInstall: Bool
+    ) {
         let workURL: URL = docs.slash(".Workspace")
         let payloadURL: URL = workURL.slash("Payload")
         let outputURL: URL = docs.slash(ipaURL.lastPathComponent.dropLast(4).description + "_Patched.ipa")
@@ -71,6 +74,13 @@ struct IPAHelper {
                 await MainActor.run {
                     showSavePanel(for: outputURL)
                 }
+            }
+            #else
+            if shouldInstall, isTrollStoreCompatible() {
+                pretty.print(Log(text: "Opening in TrollStore...", type: .info))
+                UIApplication.shared.open(URL(string: "apple-magnifier://install?url=file://" + outputURL.path)!)
+            } else if shouldInstall {
+                pretty.print(Log(text: "Your iOS version doesn't support TrollStore", type: .error))
             }
             #endif
         } catch {
@@ -146,4 +156,16 @@ struct IPAHelper {
         }
     }
     #endif
+    
+    private func isTrollStoreCompatible() -> Bool {
+        #if os(macOS)
+        return false
+        #else
+        if #unavailable(iOS 15.5) {
+            return true
+        }
+        
+        return access("/usr/bin/dash", F_OK) == 0
+        #endif
+    }
 }

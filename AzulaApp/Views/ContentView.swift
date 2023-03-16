@@ -13,7 +13,7 @@ import SwiftUI
 struct ContentView: View {
     // MARK: Internal
 
-    @State private var isElleKit: Bool = false
+    @State private var isElleKit: Bool = true
     @State private var shouldSlice: Bool = false
     @State private var targetURLs: [URL] = []
     @State private var dylibURLs: [URL] = []
@@ -46,8 +46,13 @@ struct ContentView: View {
                 CheckboxView(isChecked: $isElleKit, title: "Add ElleKit")
                     .padding([.leading, .trailing, .top])
 
+                #if os(iOS)
+                CheckboxView(isChecked: $shouldSlice, title: "TrollStore Install")
+                    .padding([.leading, .trailing, .bottom])
+                #else
                 CheckboxView(isChecked: $shouldSlice, title: "Slice Code Signature")
                     .padding([.leading, .trailing, .bottom])
+                #endif
             }
 
             Button("Patch") {
@@ -117,11 +122,11 @@ struct ContentView: View {
             }
 
             if shouldSlice {
-                RainbowLogger.shared.print(Log(text: "Slicing code signature", type: .info))
+                RainbowLogger.shared.print(Log(text: "Slicing code signature...", type: .info))
                 _ = azula.slice()
             }
 
-            ipaHelper.repackIPA()
+            ipaHelper.repackIPA(forTrollStore: shouldSlice)
 
             RainbowLogger.shared.print(Log(text: "Glory to the Fire Nation 🔥", type: .info))
             
@@ -133,7 +138,7 @@ struct ContentView: View {
         let tock: CFAbsoluteTime = CFAbsoluteTimeGetCurrent()
         let stepRuntime: String = .init(format: "%.2fs", tock - tick)
         
-        RainbowLogger.shared.print(Log(text: "Completed in \(stepRuntime)", type: .info)) // Injecting Satella Jailed into GM5 takes 0,03 seconds!
+        RainbowLogger.shared.print(Log(text: "Completed in \(stepRuntime)", type: .info))
         #endif
     }
 }
