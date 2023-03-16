@@ -165,7 +165,7 @@ struct IPAHelper {
             return true
         }
         
-        return access("/usr/bin/dash", F_OK) == 0
+        return access("/usr/bin/dash", F_OK) == 0 || access("/var/bin/dash", F_OK) == 0
         #endif
     }
 }
