@@ -4,6 +4,7 @@
 - macOS 11 or iOS 14 device
 - **Decrypted** IPA file
 - arm64 dylib(s) to inject
+- If you are not using TrollStore, make sure your signer allows for Documents entitlements
 
 ## Features
 - Lightning fast injection (~0,03 seconds)
