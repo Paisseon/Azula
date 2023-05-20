@@ -1,11 +1,10 @@
 //
 //  LogMessageView.swift
-//  AzulaApp
+//  Azula
 //
-//  Created by Lilliana on 05/03/2023.
+//  Created by Lilliana on 16/05/2023.
 //
 
-import AzulaKit
 import SwiftUI
 
 struct LogMessageView: View {
@@ -30,7 +29,7 @@ struct LogMessageView: View {
         
         +
         
-        Text(log.text)
+        Text(log.message)
             .font(.system(size: 13, design: .monospaced))
     }
 }
